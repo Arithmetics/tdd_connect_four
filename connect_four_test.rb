@@ -68,6 +68,7 @@ class CFGameTest < Minitest::Test
   end
 
 
+
 end
 
 
@@ -95,7 +96,7 @@ class WinTest < Minitest::Test
     assert @game.black_win?
   end
 
-  def test_basic_diagonal_win
+  def test_upwards_diagonal_win
     @game.play_piece(3, "red")
     @game.play_piece(4, "black")
     @game.play_piece(5, "red")
@@ -106,8 +107,23 @@ class WinTest < Minitest::Test
     @game.play_piece(5, "red")
     @game.play_piece(6, "black")
     refute @game.red_win?
-    @game.play_piece(6, "black")
+    @game.play_piece(6, "red")
     assert @game.red_win?
+  end
+
+  def test_downwards_diagonal_win
+    @game.play_piece(2, "red")
+    @game.play_piece(2, "black")
+    @game.play_piece(2, "red")
+    @game.play_piece(2, "black")
+    @game.play_piece(3, "black")
+    @game.play_piece(3, "red")
+    @game.play_piece(3, "black")
+    @game.play_piece(4, "red")
+    @game.play_piece(4, "black")
+    refute @game.black_win?
+    @game.play_piece(5, "black")
+    assert @game.black_win?
   end
 
   def test_no_win_if_interrupted
@@ -119,6 +135,31 @@ class WinTest < Minitest::Test
     @game.play_piece(4, "black")
     refute @game.black_win?
   end
+
+  def test_tie_game
+    3.times do
+      @game.play_piece(0, "black")
+      @game.play_piece(1, "red")
+      @game.play_piece(2, "black")
+      @game.play_piece(3, "red")
+      @game.play_piece(4, "black")
+      @game.play_piece(5, "red")
+      @game.play_piece(6, "black")
+    end
+    3.times do
+      @game.play_piece(0, "red")
+      @game.play_piece(1, "black")
+      @game.play_piece(2, "red")
+      @game.play_piece(3, "black")
+      @game.play_piece(4, "red")
+      @game.play_piece(5, "black")
+      @game.play_piece(6, "red")
+    end
+    refute @game.black_win?
+    refute @game.red_win?
+    assert @game.tie?
+  end
+
 
 
 
